@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+// this is the View
 struct ContentView: View {
     @State private var emojiCount = 8
     // just initialize it to vehicles for now
@@ -61,7 +61,7 @@ struct ContentView: View {
         Button {
             // change the theme
             print("vehicle pressed")
-            emojiCount = Int.random(in: 8..<vehicleEmojis.count)
+            emojiCount = Int.random(in: 8...vehicleEmojis.count)
             currentEmojis = vehicleEmojis
         } label: {
             VStack {
@@ -75,7 +75,7 @@ struct ContentView: View {
     var foodThemeButton: some View {
         Button {
             print("food pressed")
-            emojiCount = Int.random(in: 8..<foodEmojis.count)
+            emojiCount = Int.random(in: 8...foodEmojis.count)
             currentEmojis = foodEmojis
         } label: {
             VStack {
@@ -89,7 +89,7 @@ struct ContentView: View {
     var heartThemeButton: some View {
         Button {
             print("heart pressed")
-            emojiCount = Int.random(in: 8..<heartEmojis.count)
+            emojiCount = Int.random(in: 8...heartEmojis.count)
             currentEmojis = heartEmojis
         } label: {
             VStack {
