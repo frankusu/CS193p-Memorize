@@ -11,6 +11,7 @@ import SwiftUI
 
 // ObservableObject can publish to the world something changed
 class EmojiMemoryGame: ObservableObject {
+    typealias Card = MemoryGame<String>.Card
     
     static let emojis = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🛵", "🏍", "🛺", "🚘", "🚝", "🚄", "🚈", "⛵️", "✈️", "🛳",]
     
@@ -28,7 +29,7 @@ class EmojiMemoryGame: ObservableObject {
     // original version: private var model: MemoryGame<String> = MemoryGame<String>(numberOfPairsOfCards: 4, createCardContent: { (index: Int) -> String in return "😃"}) which can be reduced to code below since MemoryGame already knows what type of function it takes
     // var here since the model: MemoryGame<String> has a mutating function called choose()
     // swift knows it changes cuz MemoryGame is a struct. It will not know with a class
-    @Published private var model: MemoryGame<String> = createMemoryGame()
+    @Published private var model = createMemoryGame()
     
     
     // instead of private(set) var model we can make our own var cards
@@ -39,7 +40,7 @@ class EmojiMemoryGame: ObservableObject {
     
     // MARK: - Intent(s)
     
-    func choose(_ card: MemoryGame<String>.Card) {
+    func choose(_ card: Card) {
         // tell the world that the object will change
 //        objectWillChange.send() // don't even need this since we have @Published
         model.choose(card)

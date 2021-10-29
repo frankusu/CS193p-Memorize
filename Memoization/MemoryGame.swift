@@ -13,8 +13,27 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     // you can look at these but you cannot touch them.
     // only the model should be able to change cards
     private(set) var cards: [Card]
+            
+    private var indexOfTheOneAndOnlyFaceUpCard: Int? {
+        //            var faceUpCardIndices = [Int]()
+        //            for index in cards.indices {
+        //                if cards[index].isFaceUp {
+        //                    faceUpCardIndices.append(index)
+        //                }
+        //            }
+        //            if faceUpCardIndices.count == 1 {
+        //                return faceUpCardIndices.first
+        //            } else {
+        //                return nil
+        //            }
+        
+        // power of functional programming
+        // can take away () in ({cards[] ...}) but its 'the art of programming
+        get { cards.indices.filter({ cards[$0].isFaceUp }).oneAndOnly }
+//        set { cards.indices.forEach( { index in cards[index].isFaceUp = (index == newValue) }) }
+        set { cards.indices.forEach{ cards[$0].isFaceUp = ($0 == newValue) } }
+    }
     
-    private var indexOfTheOneAndOnlyFaceUpCard: Int?
     
     // its mutating because we changing the card array
     mutating func choose(_ card: Card) {
@@ -28,26 +47,17 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                 }
-                indexOfTheOneAndOnlyFaceUpCard = nil
+                cards[chosenIndex].isFaceUp = true
             } else {
-                for index in cards.indices {
-                    // if no match then flip all the cards facedown
-                    cards[index].isFaceUp = false
-                }
-                // and keep the one you just tapped to the chosenIndex
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
             }
-            
-            // this assign property copies the card. so you have to change the card it self from the cards array
-    //        var chosenCard = cards[chosenIndex]
-            cards[chosenIndex].isFaceUp.toggle()
         }
         print("\(cards)")
     }
     
     // we need this initializer because we don't want ViewModel to create the cards, that wouldn't make sense. We need The model to create the cards so ViewModel can just pass in the # of cards
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
-        cards = [Card]()
+        cards = []
         // add numberOfPairsOfCards x 2 cards to cards array
         for pairIndex in 0..<numberOfPairsOfCards {
             let content = createCardContent(pairIndex)
@@ -61,10 +71,26 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     struct Card: Identifiable {
 //        var id: ObjectIdentifier //this is really a "don't care"
         
-        var isFaceUp: Bool = false
-        var isMatched: Bool = false
+        var isFaceUp = false
+        var isMatched = false
         var content: CardContent
         var id: Int
         
     }
 }
+
+// extension var has to be computed cannot be stored in memory
+extension Array {
+    var oneAndOnly: Element? {
+        // oneAndOnly is itself an array so can just omit the self keyword
+//        if self.count == 1 {
+//            return self.first
+//        }
+        if count == 1 {
+            return first
+        } else {
+            return nil
+        }
+    }
+}
+
