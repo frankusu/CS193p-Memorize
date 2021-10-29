@@ -8,14 +8,15 @@
 import SwiftUI
 // this is the View
 struct ContentView: View {
-    @State private var emojiCount = 8
+    let viewModel: EmojiMemoryGame
+    
     // just initialize it to vehicles for now
     @State var currentEmojis = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🛵", "🏍", "🛺", "🚘", "🚝", "🚄", "🚈", "⛵️", "✈️", "🛳",]
     
     let vehicleEmojis = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🛵", "🏍", "🛺", "🚘", "🚝", "🚄", "🚈", "⛵️", "✈️", "🛳",]
-    
+
     let foodEmojis = ["🍏", "🍌", "🍈", "🥥", "🥦", "🌽", "🥔", "🥖", "🧈", "🍗", "🍎", "🍉", "🍒", "🥝", "🥬", "🍠", "🥨", "🥞", "🍖", "🍐", "🍇", "🍑", "🍅",] //24
-    
+
     let heartEmojis = ["❤️", "💜", "❤️‍🔥", "💓", "🧡", "🖤", "❤️‍🩹", "💗", "💛", "❣️", "💖", "💚", "🤎", "💕", "💘", "💙", "💔", "💞", "💝",] //19
     
     var body: some View {
@@ -26,10 +27,14 @@ struct ContentView: View {
                 .fontWeight(.heavy)
             
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]) {
-                    ForEach(currentEmojis[0..<emojiCount].shuffled(), id: \.self) { emoji in
-                        CardView(emoji: emoji)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
+                    ForEach(viewModel.cards) { card in
+                        CardView(card: card)
                             .aspectRatio(2/3, contentMode: .fit)
+                            .onTapGesture {
+                                // user intent to flip cards
+                                viewModel.choose(card)
+                            }
                     }
                 }
             }
@@ -61,7 +66,7 @@ struct ContentView: View {
         Button {
             // change the theme
             print("vehicle pressed")
-            emojiCount = Int.random(in: 8...vehicleEmojis.count)
+//            emojiCount = Int.random(in: 8...vehicleEmojis.count)
             currentEmojis = vehicleEmojis
         } label: {
             VStack {
@@ -75,7 +80,7 @@ struct ContentView: View {
     var foodThemeButton: some View {
         Button {
             print("food pressed")
-            emojiCount = Int.random(in: 8...foodEmojis.count)
+//            emojiCount = Int.random(in: 8...foodEmojis.count)
             currentEmojis = foodEmojis
         } label: {
             VStack {
@@ -89,7 +94,7 @@ struct ContentView: View {
     var heartThemeButton: some View {
         Button {
             print("heart pressed")
-            emojiCount = Int.random(in: 8...heartEmojis.count)
+//            emojiCount = Int.random(in: 8...heartEmojis.count)
             currentEmojis = heartEmojis
         } label: {
             VStack {
@@ -103,24 +108,21 @@ struct ContentView: View {
 }
 
 struct CardView: View {
-    var emoji: String
-    @State private var isFaceUp = true
+//    var emoji: String
+    let card: MemoryGame<String>.Card
     
     var body: some View {
         
         ZStack {
             let shape = RoundedRectangle(cornerRadius: 25)
-            if isFaceUp {
+            if card.isFaceUp {
                 shape.fill().foregroundColor(.white)
                 // strokeBorder is inside of card so it won't look cut off by scrollView
                 shape.strokeBorder(lineWidth: 3)
-                Text(emoji).font(.largeTitle)
+                Text(card.content).font(.largeTitle)
             } else {
                 shape.fill()
             }
-        }
-        .onTapGesture {
-            isFaceUp = !isFaceUp
         }
         
     }
@@ -150,7 +152,8 @@ struct CardView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        let game = EmojiMemoryGame()
+        ContentView(viewModel: game)
             // dark mode
 //            .preferredColorScheme(.dark)
     }

@@ -22,12 +22,19 @@ class EmojiMemoryGame {
     
     // ViewModel = Gatekeeper; protect model from ill-behaving views
     // original version: private var model: MemoryGame<String> = MemoryGame<String>(numberOfPairsOfCards: 4, createCardContent: { (index: Int) -> String in return "😃"}) which can be reduced to code below since MemoryGame already knows what type of function it takes
+    // var here since the model: MemoryGame<String> has a mutating function called choose()
     private var model: MemoryGame<String> = createMemoryGame()
     
     
     // instead of private(set) var model we can make our own var cards
     // the cards in the model are structs. We copy structs thats why we ask the model for it's cards with the inline function
     var cards: [MemoryGame<String>.Card] {
-        return model.cards
+        model.cards
+    }
+    
+    // MARK: - Intent(s)
+    
+    func choose(_ card: MemoryGame<String>.Card) {
+        model.choose(card)
     }
 }
