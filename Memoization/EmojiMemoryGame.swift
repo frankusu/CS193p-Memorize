@@ -9,7 +9,8 @@ import SwiftUI
 // this is the ViewModel
 // be the intermediary between the model and the view
 
-class EmojiMemoryGame {
+// ObservableObject can publish to the world something changed
+class EmojiMemoryGame: ObservableObject {
     
     static let emojis = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🛵", "🏍", "🛺", "🚘", "🚝", "🚄", "🚈", "⛵️", "✈️", "🛳",]
     
@@ -20,10 +21,13 @@ class EmojiMemoryGame {
         }
     }
     
+    // gets a var that we can't see that we get for free
+    //var objectWillChange: ObservableObjectPublisher
+    
     // ViewModel = Gatekeeper; protect model from ill-behaving views
     // original version: private var model: MemoryGame<String> = MemoryGame<String>(numberOfPairsOfCards: 4, createCardContent: { (index: Int) -> String in return "😃"}) which can be reduced to code below since MemoryGame already knows what type of function it takes
     // var here since the model: MemoryGame<String> has a mutating function called choose()
-    private var model: MemoryGame<String> = createMemoryGame()
+    @Published private var model: MemoryGame<String> = createMemoryGame()
     
     
     // instead of private(set) var model we can make our own var cards
@@ -35,6 +39,8 @@ class EmojiMemoryGame {
     // MARK: - Intent(s)
     
     func choose(_ card: MemoryGame<String>.Card) {
+        // tell the world that the object will change
+//        objectWillChange.send() // don't even need this since we have @Published
         model.choose(card)
     }
 }

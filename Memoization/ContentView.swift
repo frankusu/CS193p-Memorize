@@ -8,7 +8,8 @@
 import SwiftUI
 // this is the View
 struct ContentView: View {
-    let viewModel: EmojiMemoryGame
+    // everytime this changes please redraw me. has to be a var
+    @ObservedObject var viewModel: EmojiMemoryGame
     
     // just initialize it to vehicles for now
     @State var currentEmojis = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🛵", "🏍", "🛺", "🚘", "🚝", "🚄", "🚈", "⛵️", "✈️", "🛳",]
