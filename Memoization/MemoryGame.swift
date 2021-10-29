@@ -7,26 +7,42 @@
 
 import Foundation
 // this is the Model
-struct MemoryGame<CardContent> {
+// Binary operator '==' cannot be applied to two 'CardContent' operands
+// so we need to make the "Don't Care" generic into a Equatable using 'where'
+struct MemoryGame<CardContent> where CardContent: Equatable {
     // you can look at these but you cannot touch them.
     // only the model should be able to change cards
     private(set) var cards: [Card]
     
-    mutating func choose(_ card: Card) {
-        let chosenIndex = index(of: card)
-        // this assign property copies the card. so you have to change the card it self from the cards array
-//        var chosenCard = cards[chosenIndex]
-        cards[chosenIndex].isFaceUp.toggle()
-        print("\(cards)")
-    }
+    private var indexOfTheOneAndOnlyFaceUpCard: Int?
     
-    func index(of card: Card) -> Int {
-        for index in 0..<cards.count {
-            if cards[index].id == card.id {
-                return index
+    // its mutating because we changing the card array
+    mutating func choose(_ card: Card) {
+//        if let chosenIndex = cards.firstIndex(where: { aCardInTheCardsArray in aCardInTheCardsArray.id == card.id }) {
+        if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }),
+            !cards[chosenIndex].isFaceUp,
+            !cards[chosenIndex].isMatched
+        {
+            if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
+                if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+                    cards[chosenIndex].isMatched = true
+                    cards[potentialMatchIndex].isMatched = true
+                }
+                indexOfTheOneAndOnlyFaceUpCard = nil
+            } else {
+                for index in cards.indices {
+                    // if no match then flip all the cards facedown
+                    cards[index].isFaceUp = false
+                }
+                // and keep the one you just tapped to the chosenIndex
+                indexOfTheOneAndOnlyFaceUpCard = chosenIndex
             }
+            
+            // this assign property copies the card. so you have to change the card it self from the cards array
+    //        var chosenCard = cards[chosenIndex]
+            cards[chosenIndex].isFaceUp.toggle()
         }
-        return 0 // bogus!
+        print("\(cards)")
     }
     
     // we need this initializer because we don't want ViewModel to create the cards, that wouldn't make sense. We need The model to create the cards so ViewModel can just pass in the # of cards
@@ -45,7 +61,7 @@ struct MemoryGame<CardContent> {
     struct Card: Identifiable {
 //        var id: ObjectIdentifier //this is really a "don't care"
         
-        var isFaceUp: Bool = true
+        var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
         var id: Int

@@ -40,18 +40,18 @@ struct ContentView: View {
                 }
             }
             .foregroundColor(.red)
-            Spacer()
-            HStack {
-                Spacer()
-                vehicleThemeButton
-                Spacer()
-                foodThemeButton
-                Spacer()
-                heartThemeButton
-                Spacer()
-            }
-            .font(.largeTitle)
-            .padding(.horizontal)
+//            Spacer()
+//            HStack {
+//                Spacer()
+//                vehicleThemeButton
+//                Spacer()
+//                foodThemeButton
+//                Spacer()
+//                heartThemeButton
+//                Spacer()
+//            }
+//            .font(.largeTitle)
+//            .padding(.horizontal)
         }
         .padding(.horizontal)
         
@@ -121,6 +121,8 @@ struct CardView: View {
                 // strokeBorder is inside of card so it won't look cut off by scrollView
                 shape.strokeBorder(lineWidth: 3)
                 Text(card.content).font(.largeTitle)
+            } else if card.isMatched {
+                shape.opacity(0)
             } else {
                 shape.fill()
             }
