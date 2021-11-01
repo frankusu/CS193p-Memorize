@@ -114,21 +114,33 @@ struct CardView: View {
     let card: EmojiMemoryGame.Card
     
     var body: some View {
-        
-        ZStack {
-            let shape = RoundedRectangle(cornerRadius: 25)
-            if card.isFaceUp {
-                shape.fill().foregroundColor(.white)
-                // strokeBorder is inside of card so it won't look cut off by scrollView
-                shape.strokeBorder(lineWidth: 3)
-                Text(card.content).font(.largeTitle)
-            } else if card.isMatched {
-                shape.opacity(0)
-            } else {
-                shape.fill()
+        // we use geometry reader to calculate better font size for emoji in card
+        GeometryReader(content: { geometry in
+            ZStack {
+                let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
+                if card.isFaceUp {
+                    shape.fill().foregroundColor(.white)
+                    // strokeBorder is inside of card so it won't look cut off by scrollView
+                    shape.strokeBorder(lineWidth: 3)
+                    Text(card.content).font(font(in: geometry.size))
+                } else if card.isMatched {
+                    shape.opacity(0)
+                } else {
+                    shape.fill()
+                }
             }
-        }
+        })
         
+    }
+    
+    private func font(in size: CGSize) -> Font {
+        Font.system(size: min(size.width, size.height) * DrawingConstants.fontScale)
+    }
+    
+    private struct DrawingConstants {
+        static let cornerRadius: CGFloat = 20
+        static let lineWidth: CGFloat = 3
+        static let fontScale: CGFloat = 0.8
     }
 }
 
