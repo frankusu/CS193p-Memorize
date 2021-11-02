@@ -31,7 +31,7 @@ struct EmojiMemoryGameView: View {
 //            ScrollView {
 //                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
 //                    ForEach(game.cards) { card in
-            AspectVGrid(items: game.cards, aspectRatio: 2/3, content: { card in
+            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
                 if card.isMatched && !card.isFaceUp {
                     Rectangle().opacity(0)
                 } else {
@@ -43,7 +43,7 @@ struct EmojiMemoryGameView: View {
                             game.choose(card)
                         }
                 }
-            })
+            }
 //                    }
 //                }
 //            }
@@ -129,6 +129,9 @@ struct CardView: View {
                     shape.fill().foregroundColor(.white)
                     // strokeBorder is inside of card so it won't look cut off by scrollView
                     shape.strokeBorder(lineWidth: 3)
+//                    Circle().padding(5).opacity(0.5)
+                    Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
+                        .padding(5).opacity(0.5)
                     Text(card.content).font(font(in: geometry.size))
                 } else if card.isMatched {
                     shape.opacity(0)
@@ -147,7 +150,7 @@ struct CardView: View {
     private struct DrawingConstants {
         static let cornerRadius: CGFloat = 10
         static let lineWidth: CGFloat = 3
-        static let fontScale: CGFloat = 0.75
+        static let fontScale: CGFloat = 0.7
     }
 }
 
@@ -176,7 +179,9 @@ struct CardView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGame()
-        EmojiMemoryGameView(game: game)
+        // to flip up first card in preview without having to flip all the other cards 
+        game.choose(game.cards.first!)
+        return EmojiMemoryGameView(game: game)
             // dark mode
 //            .preferredColorScheme(.dark)
     }

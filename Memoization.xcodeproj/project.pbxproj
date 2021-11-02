@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B2C39812731EDD7001BA105 /* Pie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2C39802731EDD7001BA105 /* Pie.swift */; };
 		1B4948762730B7DB00F30800 /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4948752730B7DB00F30800 /* AspectVGrid.swift */; };
 		1BFC48DC2728AC1500C50CCD /* MemoizationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFC48DB2728AC1500C50CCD /* MemoizationApp.swift */; };
 		1BFC48DE2728AC1500C50CCD /* EmojiMemoryGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFC48DD2728AC1500C50CCD /* EmojiMemoryGameView.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B2C39802731EDD7001BA105 /* Pie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pie.swift; sourceTree = "<group>"; };
 		1B4948752730B7DB00F30800 /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
 		1BFC48D82728AC1500C50CCD /* Memoization.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memoization.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BFC48DB2728AC1500C50CCD /* MemoizationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoizationApp.swift; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				1BFC48E9272B216100C50CCD /* MemoryGame.swift */,
+				1B2C39802731EDD7001BA105 /* Pie.swift */,
 				1BFC48EB272B261900C50CCD /* EmojiMemoryGame.swift */,
 				1BFC48DB2728AC1500C50CCD /* MemoizationApp.swift */,
 				1BFC48DD2728AC1500C50CCD /* EmojiMemoryGameView.swift */,
@@ -146,6 +149,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B2C39812731EDD7001BA105 /* Pie.swift in Sources */,
 				1BFC48EA272B216200C50CCD /* MemoryGame.swift in Sources */,
 				1BFC48EC272B261900C50CCD /* EmojiMemoryGame.swift in Sources */,
 				1BFC48DE2728AC1500C50CCD /* EmojiMemoryGameView.swift in Sources */,
