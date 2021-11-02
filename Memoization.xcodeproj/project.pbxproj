@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B4948762730B7DB00F30800 /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4948752730B7DB00F30800 /* AspectVGrid.swift */; };
 		1BFC48DC2728AC1500C50CCD /* MemoizationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFC48DB2728AC1500C50CCD /* MemoizationApp.swift */; };
 		1BFC48DE2728AC1500C50CCD /* EmojiMemoryGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFC48DD2728AC1500C50CCD /* EmojiMemoryGameView.swift */; };
 		1BFC48E02728AC1700C50CCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BFC48DF2728AC1700C50CCD /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B4948752730B7DB00F30800 /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
 		1BFC48D82728AC1500C50CCD /* Memoization.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memoization.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BFC48DB2728AC1500C50CCD /* MemoizationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoizationApp.swift; sourceTree = "<group>"; };
 		1BFC48DD2728AC1500C50CCD /* EmojiMemoryGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMemoryGameView.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 				1BFC48EB272B261900C50CCD /* EmojiMemoryGame.swift */,
 				1BFC48DB2728AC1500C50CCD /* MemoizationApp.swift */,
 				1BFC48DD2728AC1500C50CCD /* EmojiMemoryGameView.swift */,
+				1B4948752730B7DB00F30800 /* AspectVGrid.swift */,
 				1BFC48DF2728AC1700C50CCD /* Assets.xcassets */,
 				1BFC48E12728AC1700C50CCD /* Preview Content */,
 			);
@@ -146,6 +149,7 @@
 				1BFC48EA272B216200C50CCD /* MemoryGame.swift in Sources */,
 				1BFC48EC272B261900C50CCD /* EmojiMemoryGame.swift in Sources */,
 				1BFC48DE2728AC1500C50CCD /* EmojiMemoryGameView.swift in Sources */,
+				1B4948762730B7DB00F30800 /* AspectVGrid.swift in Sources */,
 				1BFC48DC2728AC1500C50CCD /* MemoizationApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -17,7 +17,7 @@ class EmojiMemoryGame: ObservableObject {
     
     // don't need to include EmojiMemoryGame.emojis or EmojiMemoryGame.createMemoryGame() if its during initialization ie: "=" or if its in another static as well
     static func createMemoryGame() -> MemoryGame<String> {
-        MemoryGame<String>(numberOfPairsOfCards: 10) { pairIndex in
+        MemoryGame<String>(numberOfPairsOfCards: 8) { pairIndex in
             emojis[pairIndex]
         }
     }
