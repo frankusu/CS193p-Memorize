@@ -29,24 +29,47 @@ struct EmojiMemoryGameView: View {
         .padding()
     }
     
+    @State private var dealt = Set<Int>()
+    
+    private func deal(_ card: EmojiMemoryGame.Card) {
+        dealt.insert(card.id)
+    }
+    
+    private func isUndealt(_ card: EmojiMemoryGame.Card) -> Bool {
+        !dealt.contains(card.id)
+    }
+    
     var gameBody: some View {
         AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-            if card.isMatched && !card.isFaceUp {
+            // before the AspectVGrid is finished appearing, if the cards are not yet in the dealt, we add it after. Hence it will change from Color.clear to adding the card and will then run the .asymetric(insertion: . scale
+            if isUndealt(card) || (card.isMatched && !card.isFaceUp) {
 //                Rectangle().opacity(0)
                 Color.clear
             } else {
                 CardView(card: card)
                 //                    .aspectRatio(2/3, contentMode: .fit)
                     .padding(4)
+                // type erased?
+//                    .transition(AnyTransition.scale.animation(.easeInOut(duration: 2))) // zooms out until it disappears
+                    .transition(AnyTransition.asymmetric(insertion: .scale, removal: .opacity).animation(.easeInOut(duration: 3)))
                     .onTapGesture {
                         // user intent to flip cards
-                        withAnimation(.easeInOut(duration: 3)) {
+                        withAnimation(.easeInOut(duration: 1)) {
                             game.choose(card)
                         }
                         
                     }
             }
         }
+        // aspectVGrid needs to appear first then we get the cards on so then the .transition animation will run when appear
+        .onAppear(perform: {
+            // "deal" cards
+            withAnimation {
+                for card in game.cards {
+                    deal(card)
+                }
+            }
+        })
         .foregroundColor(.red)
     }
     
