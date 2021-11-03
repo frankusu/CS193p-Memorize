@@ -24,6 +24,7 @@ struct EmojiMemoryGameView: View {
     var body: some View {
         VStack {
             gameBody
+            deckBody
             shufle
         }
         .padding()
@@ -51,7 +52,7 @@ struct EmojiMemoryGameView: View {
                     .padding(4)
                 // type erased?
 //                    .transition(AnyTransition.scale.animation(.easeInOut(duration: 2))) // zooms out until it disappears
-                    .transition(AnyTransition.asymmetric(insertion: .scale, removal: .opacity).animation(.easeInOut(duration: 3)))
+                    .transition(AnyTransition.asymmetric(insertion: .scale, removal: .opacity))
                     .onTapGesture {
                         // user intent to flip cards
                         withAnimation(.easeInOut(duration: 1)) {
@@ -62,15 +63,37 @@ struct EmojiMemoryGameView: View {
             }
         }
         // aspectVGrid needs to appear first then we get the cards on so then the .transition animation will run when appear
-        .onAppear(perform: {
+//        .onAppear(perform: {
+//            // "deal" cards
+//            withAnimation(.easeInOut(duration: 5)) {
+//                for card in game.cards {
+//                    deal(card)
+//                }
+//            }
+//        })
+        .foregroundColor(CardConstants.color)
+    }
+    
+    var deckBody: some View {
+        ZStack {
+//            ForEach(game.cards.filter({ isUndealt($0)})) { card in
+            ForEach(game.cards.filter(isUndealt)) { card in
+                CardView(card: card)
+                    .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .scale))
+            }
+        }
+        //fixed size since we don't need deck to change size
+        .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
+        .foregroundColor(CardConstants.color)
+        // aspectVGrid needs to appear first then we get the cards on so then the .transition animation will run when appear
+        .onTapGesture {
             // "deal" cards
-            withAnimation {
+            withAnimation(.easeInOut(duration: 5)) {
                 for card in game.cards {
                     deal(card)
                 }
             }
-        })
-        .foregroundColor(.red)
+        }
     }
     
     var shufle: some View {
@@ -81,6 +104,15 @@ struct EmojiMemoryGameView: View {
             }
             
         }
+    }
+    
+    private struct CardConstants {
+        static let color = Color.red
+        static let aspectRatio: CGFloat = 2/3
+        static let dealDuration: Double = 0.5
+        static let totalDealDuration: Double = 2
+        static let undealtHeight: CGFloat = 90
+        static let undealtWidth = undealtHeight * aspectRatio
     }
 }
 
