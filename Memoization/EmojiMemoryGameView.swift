@@ -123,22 +123,29 @@ struct CardView: View {
     var body: some View {
         // we use geometry reader to calculate better font size for emoji in card
         GeometryReader(content: { geometry in
+//            ZStack {
+//                let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
+//                if card.isFaceUp {
+//                    shape.fill().foregroundColor(.white)
+//                    // strokeBorder is inside of card so it won't look cut off by scrollView
+//                    shape.strokeBorder(lineWidth: 3)
+////                    Circle().padding(5).opacity(0.5)
+//                    Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
+//                        .padding(5).opacity(0.5)
+//                    Text(card.content).font(font(in: geometry.size))
+//                } else if card.isMatched {
+//                    shape.opacity(0)
+//                } else {
+//                    shape.fill()
+//                }
+//            }
+            // using cardify simplifies the Zstack into this
             ZStack {
-                let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-                if card.isFaceUp {
-                    shape.fill().foregroundColor(.white)
-                    // strokeBorder is inside of card so it won't look cut off by scrollView
-                    shape.strokeBorder(lineWidth: 3)
-//                    Circle().padding(5).opacity(0.5)
-                    Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
-                        .padding(5).opacity(0.5)
-                    Text(card.content).font(font(in: geometry.size))
-                } else if card.isMatched {
-                    shape.opacity(0)
-                } else {
-                    shape.fill()
-                }
+                Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
+                    .padding(5).opacity(0.5)
+                Text(card.content).font(font(in: geometry.size))
             }
+            .cardify(isFaceUp: card.isFaceUp)
         })
         
     }
@@ -148,8 +155,9 @@ struct CardView: View {
     }
     
     private struct DrawingConstants {
-        static let cornerRadius: CGFloat = 10
-        static let lineWidth: CGFloat = 3
+        // in cardify
+//        static let cornerRadius: CGFloat = 10
+//        static let lineWidth: CGFloat = 3
         static let fontScale: CGFloat = 0.7
     }
 }
