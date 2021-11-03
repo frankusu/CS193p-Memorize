@@ -9,13 +9,26 @@ import SwiftUI
 
 // we use ViewModifiers so can use animation on it
 // also we can 'Cardify' any view
-struct Cardify: ViewModifier {
-    var isFaceUp: Bool
+//struct Cardify: ViewModifier {
+struct Cardify: AnimatableModifier {
+//    var isFaceUp: Bool
+    init(isFaceUp: Bool) {
+        rotation = isFaceUp ? 0 : 180
+    }
+    
+    // we tell swiftUI what data in here we want to animate. In this case its 'rotation'
+    var animatableData: Double {
+        get { rotation }
+        set { rotation = newValue }
+    }
+    
+    var rotation: Double // in degrees
     
     func body(content: Content) -> some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-            if isFaceUp {
+//            if isFaceUp {
+            if rotation < 90 {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
                 // content is what we 'cardify' which is the Pie and text from View
@@ -25,9 +38,12 @@ struct Cardify: ViewModifier {
                 shape.fill()
             }
             // hence we need to use a hack to set the opacity based on if is faced up for the second card that matched to spin as well
-            content.opacity(isFaceUp ? 1 : 0)
+//            content.opacity(isFaceUp ? 1 : 0)
+            content.opacity(rotation < 90 ? 1 : 0)
             
         }
+        // flipping the card animation along the y axis
+        .rotation3DEffect(Angle.degrees(rotation), axis: (0, 1, 0))
     }
     
     private struct DrawingConstants {

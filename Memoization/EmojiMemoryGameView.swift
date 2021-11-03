@@ -22,98 +22,43 @@ struct EmojiMemoryGameView: View {
     let heartEmojis = ["❤️", "💜", "❤️‍🔥", "💓", "🧡", "🖤", "❤️‍🩹", "💗", "💛", "❣️", "💖", "💚", "🤎", "💕", "💘", "💙", "💔", "💞", "💝",] //19
     
     var body: some View {
-
         VStack {
-//            Text("Memorize!")
-//                .font(.largeTitle)
-//                .fontWeight(.heavy)
-            
-//            ScrollView {
-//                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-//                    ForEach(game.cards) { card in
-            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-                if card.isMatched && !card.isFaceUp {
-                    Rectangle().opacity(0)
-                } else {
-                    CardView(card: card)
-    //                    .aspectRatio(2/3, contentMode: .fit)
-                        .padding(4)
-                        .onTapGesture {
-                            // user intent to flip cards
+            gameBody
+            shufle
+        }
+        .padding()
+    }
+    
+    var gameBody: some View {
+        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+            if card.isMatched && !card.isFaceUp {
+//                Rectangle().opacity(0)
+                Color.clear
+            } else {
+                CardView(card: card)
+                //                    .aspectRatio(2/3, contentMode: .fit)
+                    .padding(4)
+                    .onTapGesture {
+                        // user intent to flip cards
+                        withAnimation(.easeInOut(duration: 3)) {
                             game.choose(card)
                         }
-                }
-            }
-//                    }
-//                }
-//            }
-            .foregroundColor(.red)
-//            Spacer()
-//            HStack {
-//                Spacer()
-//                vehicleThemeButton
-//                Spacer()
-//                foodThemeButton
-//                Spacer()
-//                heartThemeButton
-//                Spacer()
-//            }
-//            .font(.largeTitle)
-//            .padding(.horizontal)
-        }
-        .padding(.horizontal)
-        
-        
-    }
-    
-    // systemName from SFSymbol
-    // mouth for Food
-    // car for Vehicle
-    // heart for Heart
-    
-    var vehicleThemeButton: some View {
-        Button {
-            // change the theme
-            print("vehicle pressed")
-//            emojiCount = Int.random(in: 8...vehicleEmojis.count)
-            currentEmojis = vehicleEmojis
-        } label: {
-            VStack {
-                Image(systemName: "car")
-                Text("Vehicles")
-                    .font(.body)
+                        
+                    }
             }
         }
+        .foregroundColor(.red)
     }
     
-    var foodThemeButton: some View {
-        Button {
-            print("food pressed")
-//            emojiCount = Int.random(in: 8...foodEmojis.count)
-            currentEmojis = foodEmojis
-        } label: {
-            VStack {
-                Image(systemName: "mouth")
-                Text("Food")
-                    .font(.body)
+    var shufle: some View {
+        Button("Shuffle") {
+            // we use explicit animation for call to intent functions
+            withAnimation(.easeInOut(duration: 1)) {
+                game.shuffle()
             }
+            
         }
     }
-    
-    var heartThemeButton: some View {
-        Button {
-            print("heart pressed")
-//            emojiCount = Int.random(in: 8...heartEmojis.count)
-            currentEmojis = heartEmojis
-        } label: {
-            VStack {
-                Image(systemName: "heart")
-                Text("Hearts")
-                    .font(.body)
-            }
-        }
-    }
-
 }
 
 struct CardView: View {

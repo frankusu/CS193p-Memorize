@@ -55,6 +55,10 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         print("\(cards)")
     }
     
+    mutating func shuffle() {
+        cards.shuffle()
+    }
+    
     // we need this initializer because we don't want ViewModel to create the cards, that wouldn't make sense. We need The model to create the cards so ViewModel can just pass in the # of cards
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
         cards = []
@@ -64,6 +68,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
             cards.append(Card(content: content, id: pairIndex*2)) // 0 2 4 6
             cards.append(Card(content: content, id: pairIndex*2+1)) // 1 3 5
         }
+        cards.shuffle()
     }
     
     // this is actually MemoryGame.Card

@@ -45,4 +45,8 @@ class EmojiMemoryGame: ObservableObject {
 //        objectWillChange.send() // don't even need this since we have @Published
         model.choose(card)
     }
+    
+    func shuffle() {
+        model.shuffle()
+    }
 }
