@@ -19,10 +19,14 @@ struct Cardify: ViewModifier {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
                 // content is what we 'cardify' which is the Pie and text from View
-                content
+                // since implicit animations only work on things that are already on the screen, and content is only on the screen for isFaceUp, that means the animation wouldn't appy to it the moment it appears.
+//                content
             } else {
                 shape.fill()
             }
+            // hence we need to use a hack to set the opacity based on if is faced up for the second card that matched to spin as well
+            content.opacity(isFaceUp ? 1 : 0)
+            
         }
     }
     
