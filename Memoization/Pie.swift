@@ -15,6 +15,17 @@ struct Pie: Shape {
     // need var for struct here or else default value would always be false
     var clockWise: Bool = false
     
+    // animate the startangle and end angle of our pie
+    var animatableData: AnimatablePair<Double, Double> {
+        get {
+            AnimatablePair(startAngle.radians, endAngle.radians)
+        }
+        set {
+            startAngle = Angle.radians(newValue.first)
+            endAngle = Angle.radians(newValue.second)
+        }
+    }
+    
     func path(in rect: CGRect) -> Path {
         
         let center = CGPoint(x: rect.midX, y: rect.midY)

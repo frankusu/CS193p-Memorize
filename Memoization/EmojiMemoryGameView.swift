@@ -24,7 +24,7 @@ struct EmojiMemoryGameView: View {
     let heartEmojis = ["❤️", "💜", "❤️‍🔥", "💓", "🧡", "🖤", "❤️‍🩹", "💗", "💛", "❣️", "💖", "💚", "🤎", "💕", "💘", "💙", "💔", "💞", "💝",] //19
     
     var body: some View {
-        ZStack(alignment: .bottom) { // so when the deck disappears it won't leave space for where the deck used to be 
+        ZStack(alignment: .bottom) { // so when the deck disappears it won't leave space for where the deck used to be
             VStack {
                 gameBody
                 HStack {
@@ -154,6 +154,10 @@ struct CardView: View {
 //    var emoji: String
     let card: EmojiMemoryGame.Card
     
+    // want to animate to the future since we want to count down to zero.
+    // but since theres nothing chaning in the view the pie won't move. Thats why we animate to the future ( value )
+    @State private var animatedBonusRemaining: Double = 0
+    
     var body: some View {
         // we use geometry reader to calculate better font size for emoji in card
         GeometryReader(content: { geometry in
@@ -175,8 +179,24 @@ struct CardView: View {
 //            }
             // using cardify simplifies the Zstack into this
             ZStack {
-                Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
-                    .padding(5).opacity(0.5)
+//                Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
+//                    .padding(5).opacity(0.5)
+                Group {
+                    if card.isConsumingBonusTime {
+                        // everytime this pie appears we wil start from card.bonusRemaining and animate to wards 0 
+                        Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: (1-animatedBonusRemaining)*360-90))
+                            .onAppear {
+                                animatedBonusRemaining = card.bonusRemaining
+                                withAnimation(.linear(duration: card.bonusTimeRemaining)) {
+                                    animatedBonusRemaining = 0
+                                }
+                            }
+                    } else {
+                        Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: (1-card.bonusRemaining)*360-90))
+                    }
+                }
+                .padding(5)
+                .opacity(0.5)
                 Text(card.content)
                     .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
                 // implicit animation rarely used
