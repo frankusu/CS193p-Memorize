@@ -12,6 +12,8 @@ struct EmojiMemoryGameView: View {
     // var game is the viewModel
     @ObservedObject var game: EmojiMemoryGame
     
+    @Namespace private var dealingNamespace
+    
     // just initialize it to vehicles for now
     @State var currentEmojis = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🛵", "🏍", "🛺", "🚘", "🚝", "🚄", "🚈", "⛵️", "✈️", "🛳",]
     
@@ -40,6 +42,19 @@ struct EmojiMemoryGameView: View {
         !dealt.contains(card.id)
     }
     
+    private func dealAnimation(for card: EmojiMemoryGame.Card) -> Animation {
+        var delay = 0.0
+        if let index = game.cards.firstIndex(where: { $0.id == card.id }) {
+            delay = Double(index) * (CardConstants.totalDealDuration / Double(game.cards.count))
+        }
+        return Animation.easeInOut(duration: CardConstants.dealDuration).delay(delay)
+    }
+    
+    // make cards deal from the top of the deck
+    private func zIndex(of card: EmojiMemoryGame.Card) -> Double {
+        -Double(game.cards.firstIndex(where: { $0.id == card.id}) ?? 0 )
+    }
+    
     var gameBody: some View {
         AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
             // before the AspectVGrid is finished appearing, if the cards are not yet in the dealt, we add it after. Hence it will change from Color.clear to adding the card and will then run the .asymetric(insertion: . scale
@@ -49,10 +64,12 @@ struct EmojiMemoryGameView: View {
             } else {
                 CardView(card: card)
                 //                    .aspectRatio(2/3, contentMode: .fit)
+                    .matchedGeometryEffect(id: card.id, in: dealingNamespace) // linked to deck body
                     .padding(4)
                 // type erased?
 //                    .transition(AnyTransition.scale.animation(.easeInOut(duration: 2))) // zooms out until it disappears
-                    .transition(AnyTransition.asymmetric(insertion: .scale, removal: .opacity))
+                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .scale)) // when appear do nothing, when remove .scale
+                    .zIndex(zIndex(of: card)) // higher number will be in the front, smaller would be in the back
                     .onTapGesture {
                         // user intent to flip cards
                         withAnimation(.easeInOut(duration: 1)) {
@@ -79,7 +96,8 @@ struct EmojiMemoryGameView: View {
 //            ForEach(game.cards.filter({ isUndealt($0)})) { card in
             ForEach(game.cards.filter(isUndealt)) { card in
                 CardView(card: card)
-                    .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .scale))
+                    .matchedGeometryEffect(id: card.id, in: dealingNamespace) // linked to game body
+                    .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
             }
         }
         //fixed size since we don't need deck to change size
@@ -88,8 +106,8 @@ struct EmojiMemoryGameView: View {
         // aspectVGrid needs to appear first then we get the cards on so then the .transition animation will run when appear
         .onTapGesture {
             // "deal" cards
-            withAnimation(.easeInOut(duration: 5)) {
-                for card in game.cards {
+            for card in game.cards {
+                withAnimation(dealAnimation(for: card)) {
                     deal(card)
                 }
             }
