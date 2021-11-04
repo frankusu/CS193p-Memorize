@@ -24,11 +24,18 @@ struct EmojiMemoryGameView: View {
     let heartEmojis = ["❤️", "💜", "❤️‍🔥", "💓", "🧡", "🖤", "❤️‍🩹", "💗", "💛", "❣️", "💖", "💚", "🤎", "💕", "💘", "💙", "💔", "💞", "💝",] //19
     
     var body: some View {
-        VStack {
-            gameBody
+        ZStack(alignment: .bottom) { // so when the deck disappears it won't leave space for where the deck used to be 
+            VStack {
+                gameBody
+                HStack {
+                    restart
+                    Spacer()
+                    shuffle
+                }
+            }
             deckBody
-            shufle
         }
+        
         .padding()
     }
     
@@ -114,13 +121,22 @@ struct EmojiMemoryGameView: View {
         }
     }
     
-    var shufle: some View {
+    var shuffle: some View {
         Button("Shuffle") {
             // we use explicit animation for call to intent functions
             withAnimation(.easeInOut(duration: 1)) {
                 game.shuffle()
             }
             
+        }
+    }
+    
+    var restart: some View {
+        Button("Restart") {
+            withAnimation {
+                dealt = []
+                game.restart()
+            }
         }
     }
     

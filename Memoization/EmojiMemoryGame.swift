@@ -49,4 +49,9 @@ class EmojiMemoryGame: ObservableObject {
     func shuffle() {
         model.shuffle()
     }
+    
+    func restart() {
+        // will change @Published private var model so will cause everything to redraw
+        model = EmojiMemoryGame.createMemoryGame()
+    }
 }
